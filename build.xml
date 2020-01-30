@@ -1,0 +1,59 @@
+<project name="satwrapper" default="build" basedir=".">
+
+    <property name="build" location="build"/>
+    <property name="src" location="src/org/satwrapper"/>
+    <property name="libs" location="libs"/>
+    <property name="cadical" location="cadical/cadical-master"/>
+    <property name="build_cadical" location="src/build_cadical.sh"/>
+
+    <target name="init">
+        <mkdir dir="${build}"/>
+        <delete file="org.satwrapper.jar"/>
+        <javac srcdir="${src}" destdir="${build}"/>
+    </target>
+
+    <target name="get_cadical" depends="init">
+        <mkdir dir="cadical"/>
+        <get src="https://github.com/arminbiere/cadical/archive/master.zip" dest="cadical"/>
+        <unzip src="cadical/master.zip" dest="cadical"/>
+        <chmod file="${build_cadical}" perm="u+x"/>
+        <exec executable="${build_cadical}" os="Linux" dir="src" failonerror="true"/>
+    </target>
+
+    <target name="compile" depends="init, get_cadical">
+        <exec executable="g++" os="Linux" failonerror="true" dir="${libs}">
+            <arg value="-c"/>
+            <arg value="-fPIC"/>
+            <arg value="${src}/org_satwrapper_CadicalSolver.cpp"/>
+            <arg value="-o"/>
+            <arg value="${build}/org_satwrapper_CadicalSolver.o"/>
+            <arg value="-I${java.home}/include/"/>
+            <arg value="-I${java.home}/include/linux"/>
+        </exec>
+        <exec executable="g++" os="Linux" failonerror="true" dir="${libs}">
+            <arg value="-shared"/>
+            <arg value="-o"/>
+            <arg value="libcadicalsolver.so"/>
+            <arg value="${build}/org_satwrapper_CadicalSolver.o"/>
+            <arg value="-Wl,-rpath,${libs}"/>
+            <arg value="-L${libs}"/>
+            <arg value="-lcadical"/>
+        </exec>
+
+    </target>
+
+    <target name="build" depends="init">
+        <jar destfile="org.satwrapper.jar" includes="">
+        <fileset dir="${build}" includes="**/*.class"/>
+        <fileset dir="" includes="libs/*.so" />
+        <manifest>
+        <attribute name="Class-Path" value="."/>
+        </manifest>
+        </jar>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+    </target>
+
+</project>

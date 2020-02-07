@@ -1,29 +1,66 @@
 package org.satwrapper;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
-public class CadicalSolver extends Solver{
+public class CadicalSolver extends Solver {
     //pointer to CPP class
     private long pointer;
+    private int vars;
 
     static {
-        File file = new File("./libs/libcadicalsolver.so");
         try {
-            System.load(file.getCanonicalPath());
+            LibLoader.loadLibrary("cadicalsolver");
         } catch (IOException e) {
-            System.out.println("lol");
+            throw new UnsatisfiedLinkError(e.getMessage());
         }
+    }
+
+    private int[] toIntArray(List<Integer> array) {
+        int[] result = new int[array.size()];
+        int i = 0;
+        for (int element : array) {
+            result[i++]=element;
+        }
+        return result;
     }
 
     public CadicalSolver() {
         pointer = 0;
+        vars = 0;
         pointer = create();
         if (pointer == 0) {
             throw new OutOfMemoryError();
         }
     }
 
+    @Override
+    public void add(int lit) {
+        vars++;
+        cadical_add_val(pointer, lit);
+    }
+
+    @Override
+    public void assume(int lit) {
+        cadical_assume(pointer, lit);
+    }
+
+    @Override
+    public boolean failed(int lit) {
+        return cadical_failed(pointer, lit);
+    }
+
+    @Override
+    public int solve() {
+        return cadical_solve(pointer);
+    }
+
+    @Override
+    public int val(int lit) {
+        return cadical_val(pointer, lit);
+    }
+
+    @Override
     public void close() {
         if (pointer != 0) {
             delete(pointer);
@@ -31,25 +68,26 @@ public class CadicalSolver extends Solver{
         }
     }
 
-    public void add(int lit) {
-        cadical_add_val(pointer, lit);
+    @Override
+    public void addClause(int[] literals) {
+        for (int i : literals) {
+            vars = Math.max(Math.abs(i), vars);
+        }
+        cadical_add_clause(pointer, literals);
     }
 
-    public void assume(int lit) {
-        cadical_assume(pointer, lit);
+    @Override
+    public void addClause(List<Integer> literals) {
+        for (int i : literals) {
+            vars = Math.max(Math.abs(i), vars);
+        }
+        cadical_add_clause(pointer, toIntArray(literals));
     }
 
-    public boolean failed(int lit) {
-        return cadical_failed(pointer, lit);
+    @Override
+    public int addVariable() {
+        return ++vars;
     }
-
-    public int solve() {
-        return cadical_solve(pointer);
-    }
-
-    public int val(int lit) {
-        return cadical_val(pointer, lit);
-    };
 
     private native long create();
 
@@ -64,4 +102,7 @@ public class CadicalSolver extends Solver{
     private native void cadical_assume(long pointer, int lit);
 
     private native boolean cadical_failed(long pointer, int lit);
+
+    private native void cadical_add_clause(long pointer, int[] literals);
+
 }

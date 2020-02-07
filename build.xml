@@ -21,6 +21,7 @@
     </target>
 
     <target name="compile" depends="init, get_cadical">
+
         <exec executable="g++" os="Linux" failonerror="true" dir="${libs}">
             <arg value="-c"/>
             <arg value="-fPIC"/>
@@ -43,6 +44,8 @@
     </target>
 
     <target name="build" depends="init">
+        <echo>Java/JVM version: ${ant.java.version}</echo>
+        <echo>Java/JVM detail version: ${java.version}</echo>
         <jar destfile="org.satwrapper.jar" includes="">
         <fileset dir="${build}" includes="**/*.class"/>
         <fileset dir="" includes="libs/*.so" />

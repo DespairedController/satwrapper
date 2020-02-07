@@ -63,6 +63,14 @@ JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1assume
 JNIEXPORT jboolean JNICALL Java_org_satwrapper_CadicalSolver_cadical_1failed
   (JNIEnv *, jobject, jlong, jint);
 
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_add_clause
+ * Signature: (J[I)V
+ */
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause
+  (JNIEnv *, jobject, jlong, jintArray);
+
 #ifdef __cplusplus
 }
 #endif

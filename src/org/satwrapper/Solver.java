@@ -2,29 +2,58 @@ package org.satwrapper;
 
 import java.util.List;
 
-public abstract class Solver {
+public interface Solver extends AutoCloseable {
 
-//  === IPASIR ===
-    public abstract void add(int lit);
+    //  === IPASIR ===
+    void add(int lit);
 
-    public abstract int solve();
+    int solve();
 
-    public abstract int val(int lit);
+    int val(int lit);
 
-    public abstract void assume(int lit);
+    void assume(int lit);
 
-    public abstract boolean failed(int lit);
-//  === END IPASIR ===
+    boolean failed(int lit);
 
-    public abstract void close();
+    //  === END IPASIR ===
 
-    public abstract void addClause(int... literals);
+    boolean frozen(int lit);
 
-    public abstract void addClause(List<Integer> literals);
+    void freeze(int lit);
 
-    public abstract int addLiteral();
+    void melt(int lit);
 
-    public abstract boolean[] getLiterals();
+    int fixed(int lit);
 
-    public abstract int getNumberOfLiterals();
+    // solve under assumption
+    int solve(int lit);
+
+    int solve(int lit1, int lit2);
+
+    int solve(int lit1, int lit2, int lit3);
+
+    int solve(int[] literals);
+
+    int solve(List<Integer> literals);
+
+    @Override
+    void close();
+
+    void addClause(int lit);
+
+    void addClause(int lit1, int lit2);
+
+    void addClause(int lit1, int lit2, int lit3);
+
+    void addClause(int... literals);
+
+    void addClause(List<Integer> literals);
+
+    int addLiteral();
+
+    boolean[] getLiterals();
+
+    int getNumberOfLiterals();
+
+    int getNumberOfClauses();
 }

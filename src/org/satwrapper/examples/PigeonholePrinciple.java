@@ -3,36 +3,35 @@ package org.satwrapper.examples;
 import org.satwrapper.CadicalSolver;
 import org.satwrapper.Solver;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class PigeonholePrinciple {
-    private PigeonholePrinciple() {}
+    private static Solver solver;
+    private static int n;
+    private static int[] table;
 
-    private static Solver generate(int n) {
-        Solver solver = new CadicalSolver();
-        List<Integer> clause = new ArrayList<>();
+    private static void generate() {
+        for (int i = 0; i < table.length; i++)
+            table[i] = solver.addLiteral();
+        int[] clause = new int[n - 1];
         for (int i = 0; i < n; i++) {
-            for (int j = 1; j < n; j++) {
-                clause.add(i * n + j);
-            }
+            System.arraycopy(table, i * n, clause, 0, n - 1);
             solver.addClause(clause);
-            clause.clear();
         }
 
-        for (int k = 1; k < n; k++) {
+        for (int k = 0; k < n - 1; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     if (i == j) continue;
-                    solver.addClause(-(i * n + k), -(j * n + k));
+                    solver.addClause(-table[i * n + k], -table[j * n + k]);
                 }
             }
         }
-        return solver;
     }
 
-    public static boolean isPigeonholePrincipleTrue(final int n) {
-        Solver solver = generate(n);
+    public static boolean isPigeonholePrincipleTrue(int num) {
+        n = num;
+        solver = new CadicalSolver();
+        table = new int[n * n];
+        generate();
         return solver.solve() == 20;
     }
 }

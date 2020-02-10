@@ -25,6 +25,38 @@ JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_delete
 
 /*
  * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_frozen
+ * Signature: (JI)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_satwrapper_CadicalSolver_cadical_1frozen
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_freeze
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1freeze
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_melt
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1melt
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_fixed
+ * Signature: (JI)I
+ */
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1fixed
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
  * Method:    cadical_add_val
  * Signature: (JI)V
  */
@@ -36,8 +68,40 @@ JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1val
  * Method:    cadical_solve
  * Signature: (J)I
  */
-JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__J
   (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_solve
+ * Signature: (JI)I
+ */
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__JI
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_solve
+ * Signature: (JII)I
+ */
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__JII
+  (JNIEnv *, jclass, jlong, jint, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_solve
+ * Signature: (JIII)I
+ */
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__JIII
+  (JNIEnv *, jclass, jlong, jint, jint, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_solve
+ * Signature: (J[I)I
+ */
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__J_3I
+  (JNIEnv *, jclass, jlong, jintArray);
 
 /*
  * Class:     org_satwrapper_CadicalSolver
@@ -66,9 +130,33 @@ JNIEXPORT jboolean JNICALL Java_org_satwrapper_CadicalSolver_cadical_1failed
 /*
  * Class:     org_satwrapper_CadicalSolver
  * Method:    cadical_add_clause
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause__JI
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_add_clause
+ * Signature: (JII)V
+ */
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause__JII
+  (JNIEnv *, jclass, jlong, jint, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_add_clause
+ * Signature: (JIII)V
+ */
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause__JIII
+  (JNIEnv *, jclass, jlong, jint, jint, jint);
+
+/*
+ * Class:     org_satwrapper_CadicalSolver
+ * Method:    cadical_add_clause
  * Signature: (J[I)V
  */
-JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause__J_3I
   (JNIEnv *, jclass, jlong, jintArray);
 
 /*

@@ -22,10 +22,11 @@ public final class EssentialVariables {
         Solver solver = new CadicalSolver();
 
         for (List<Integer> clause : formula) {
+            List<Integer> satClause = new ArrayList<>();
             for (int i : clause) {
-                solver.add(i > 0 ? pLit(i) : nLit(-i));
+                satClause.add(i > 0 ? pLit(i) : nLit(-i));
             }
-            solver.add(0);
+            solver.addClause(satClause);
         }
 
         for (int i = 1; i <= literalNumber; i++) {
@@ -39,10 +40,7 @@ public final class EssentialVariables {
         List<Integer> answer = new ArrayList<>();
 
         for (int i = 1; i <= literalNumber; i++) {
-            solver.assume(-nLit(i));
-            solver.assume(-pLit(i));
-            int res = solver.solve();
-            if (res == 20) {
+            if (solver.solve(-nLit(i), -pLit(i)) == 20) {
                 answer.add(i);
             }
         }

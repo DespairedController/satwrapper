@@ -1,6 +1,6 @@
 #include "../../../cadical/cadical-master/src/cadical.hpp"
 #include "org_satwrapper_CadicalSolver.h"
-
+#include <iostream>
 static inline jlong encode(CaDiCaL::Solver* p) {
 	return static_cast<jlong>(reinterpret_cast<intptr_t>(p));
 }
@@ -19,21 +19,29 @@ JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_delete
     delete decode(p);
   }
 
-JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__J
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1val
+  (JNIEnv * env, jclass this_class, jlong p, jint lit) {
+    decode(p)->add(lit);
+  }
+
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve
   (JNIEnv * env, jclass this_class, jlong p) {
     return decode(p)->solve();
   }
 
-JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1solve__J_3I
-  (JNIEnv * env, jclass this_class, jlong p, jintArray assumptions) {
-     jsize array_length = env->GetArrayLength(assumptions);
-         CaDiCaL::Solver * solver = decode(p);
-         jint * array = env->GetIntArrayElements(assumptions, 0);
-         for (int i = 0; i < array_length; i++) {
-             solver->assume(array[i]);
-         }
-         env->ReleaseIntArrayElements(assumptions, array, 0);
-         return solver->solve();
+JNIEXPORT jint JNICALL Java_org_satwrapper_CadicalSolver_cadical_1val
+  (JNIEnv * env, jclass this_class, jlong p, jint lit){
+    return decode(p)->val(lit);
+  }
+
+JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1assume
+  (JNIEnv * env, jclass this_class, jlong p, jint lit) {
+    decode(p)->assume(lit);
+  }
+
+JNIEXPORT jboolean JNICALL Java_org_satwrapper_CadicalSolver_cadical_1failed
+  (JNIEnv * env, jclass this_class, jlong p, jint lit) {
+    return decode(p)->failed(lit);
   }
 
 JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause

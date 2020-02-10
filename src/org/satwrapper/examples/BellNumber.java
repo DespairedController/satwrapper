@@ -3,53 +3,52 @@ package org.satwrapper.examples;
 import org.satwrapper.CadicalSolver;
 import org.satwrapper.Solver;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public final class BellNumber {
     private BellNumber() {
     }
-
-    private static int[] table;
-    private static Solver solver;
-    private static int n;
-
-    private static void generate() {
-        for (int i = 0; i < table.length; i++) {
-            table[i] = solver.addLiteral();
-        }
+    private static Solver generate(Solver solver, final int n) {
 
         for (int i = 0; i < n; i++) {
-            solver.addClause(table[i * (n + 1)]);
+            solver.addClause(i * (n + 1) + 1);
         }
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                solver.addClause(table[i * n + j], -table[j * n + i]);
+                solver.addClause(i * n + j + 1, -(j * n + i + 1));
             }
         }
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 for (int k = 0; k < n; k++) {
-                    solver.addClause(-table[i * n + j], -table[j * n + k], table[i * n + k]);
+                    solver.addClause(-(i * n + j + 1), -(j * n + k + 1), i * n + k + 1);
                 }
             }
         }
+        return solver;
     }
 
-    public static int getNthBellNumber(final int num) {
-        n = num;
-        table = new int[n * n];
-        solver = new CadicalSolver();
-        generate();
+    public static int getNthBellNumber(final int n) {
+        Solver solver = generate(new CadicalSolver(), n);
 
-        int[] clause = new int[table.length];
         int answer = 0;
-        while (solver.solve()) {
+        while (solver.solve() == 10) {
             answer++;
-            boolean[] result = solver.getLiterals();
-            for (int i = 0; i < table.length; i++) {
-                clause[i] = result[table[i]] ? -table[i] : table[i];
+            List<Integer> list = new LinkedList<>();
+            for (int i = 0; i < n * n; i++) {
+                if (solver.val(i + 1) > 0) {
+                    list.add(-(i + 1));
+                } else {
+                    list.add(i + 1);
+                }
             }
-            solver.addClause(clause);
+            for (int i : list) {
+                solver.add(i);
+            }
+            solver.add(0);
         }
         solver.close();
         return answer;

@@ -2,22 +2,29 @@ package org.satwrapper;
 
 import java.util.List;
 
-public interface Solver {
-    boolean solve();
+public abstract class Solver {
 
-    boolean solve(int... assumptions);
+//  === IPASIR ===
+    public abstract void add(int lit);
 
-    boolean solve(List<Integer> assumptions);
+    public abstract int solve();
 
-    void close();
+    public abstract int val(int lit);
 
-    void addClause(int... literals);
+    public abstract void assume(int lit);
 
-    void addClause(List<Integer> literals);
+    public abstract boolean failed(int lit);
+//  === END IPASIR ===
 
-    int addLiteral();
+    public abstract void close();
 
-    boolean[] getLiterals();
+    public abstract void addClause(int... literals);
 
-    int getNumberOfLiterals();
+    public abstract void addClause(List<Integer> literals);
+
+    public abstract int addLiteral();
+
+    public abstract boolean[] getLiterals();
+
+    public abstract int getNumberOfLiterals();
 }

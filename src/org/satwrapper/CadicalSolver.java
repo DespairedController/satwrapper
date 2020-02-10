@@ -36,7 +36,7 @@ public class CadicalSolver extends Solver {
 
     @Override
     public void add(int lit) {
-        vars++;
+        vars = Math.max(vars, lit);
         cadical_add_val(pointer, lit);
     }
 
@@ -85,24 +85,35 @@ public class CadicalSolver extends Solver {
     }
 
     @Override
-    public int addVariable() {
+    public int addLiteral() {
         return ++vars;
     }
 
-    private native long create();
+    @Override
+    public int[] getLiterals() {
+        return cadical_get_literals(pointer);
+    }
 
-    private native void delete(long pointer);
+    @Override
+    public int getNumberOfLiterals() {
+        return vars;
+    }
 
-    private native void cadical_add_val(long pointer, int val);
+    private static native long create();
 
-    private native int cadical_solve(long pointer);
+    private static native void delete(long pointer);
 
-    private native int cadical_val(long pointer, int lit);
+    private static native void cadical_add_val(long pointer, int val);
 
-    private native void cadical_assume(long pointer, int lit);
+    private static native int cadical_solve(long pointer);
 
-    private native boolean cadical_failed(long pointer, int lit);
+    private static native int cadical_val(long pointer, int lit);
 
-    private native void cadical_add_clause(long pointer, int[] literals);
+    private static native void cadical_assume(long pointer, int lit);
 
+    private static native boolean cadical_failed(long pointer, int lit);
+
+    private static native void cadical_add_clause(long pointer, int[] literals);
+
+    private static native int[] cadical_get_literals(long pointer);
 }

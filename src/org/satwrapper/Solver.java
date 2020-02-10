@@ -22,5 +22,9 @@ public abstract class Solver {
 
     public abstract void addClause(List<Integer> literals);
 
-    public abstract int addVariable();
+    public abstract int addLiteral();
+
+    public abstract int[] getLiterals();
+
+    public abstract int getNumberOfLiterals();
 }

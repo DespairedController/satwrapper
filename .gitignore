@@ -1,9 +1,0 @@
-.idea
-build
-out
-org.satwrapper.jar
-test
-cadical
-src/org/satwrapper/*.class
-src/org/satwrapper/examples/ExampleRunner.java
-

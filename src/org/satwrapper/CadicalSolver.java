@@ -3,7 +3,7 @@ package org.satwrapper;
 import java.io.IOException;
 import java.util.List;
 
-public class CadicalSolver extends Solver {
+public class CadicalSolver implements Solver {
     //pointer to CPP class
     private long pointer;
     private int vars;
@@ -35,29 +35,18 @@ public class CadicalSolver extends Solver {
     }
 
     @Override
-    public void add(int lit) {
-        vars = Math.max(vars, lit);
-        cadical_add_val(pointer, lit);
+    public boolean solve() {
+        return cadical_solve(pointer) == 10;
     }
 
     @Override
-    public void assume(int lit) {
-        cadical_assume(pointer, lit);
+    public boolean solve(int[] assumptions) {
+        return cadical_solve(pointer, assumptions) == 10;
     }
 
     @Override
-    public boolean failed(int lit) {
-        return cadical_failed(pointer, lit);
-    }
-
-    @Override
-    public int solve() {
-        return cadical_solve(pointer);
-    }
-
-    @Override
-    public int val(int lit) {
-        return cadical_val(pointer, lit);
+    public boolean solve(List<Integer> assumptions) {
+        return cadical_solve(pointer, toIntArray(assumptions)) == 10;
     }
 
     @Override
@@ -107,15 +96,9 @@ public class CadicalSolver extends Solver {
 
     private static native void delete(long pointer);
 
-    private static native void cadical_add_val(long pointer, int val);
-
     private static native int cadical_solve(long pointer);
 
-    private static native int cadical_val(long pointer, int lit);
-
-    private static native void cadical_assume(long pointer, int lit);
-
-    private static native boolean cadical_failed(long pointer, int lit);
+    private static native int cadical_solve(long pointer, int[] assumptions);
 
     private static native void cadical_add_clause(long pointer, int[] literals);
 

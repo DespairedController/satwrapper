@@ -90,8 +90,12 @@ public class CadicalSolver extends Solver {
     }
 
     @Override
-    public int[] getLiterals() {
-        return cadical_get_literals(pointer);
+    public boolean[] getLiterals() {
+        boolean[] result = cadical_get_literals(pointer);
+        if (result == null) {
+            throw new OutOfMemoryError();
+        }
+        return result;
     }
 
     @Override
@@ -115,5 +119,5 @@ public class CadicalSolver extends Solver {
 
     private static native void cadical_add_clause(long pointer, int[] literals);
 
-    private static native int[] cadical_get_literals(long pointer);
+    private static native boolean[] cadical_get_literals(long pointer);
 }

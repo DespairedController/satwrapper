@@ -56,19 +56,19 @@ JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause
     env->ReleaseIntArrayElements(literals, array, 0);
   }
 
-JNIEXPORT jintArray JNICALL Java_org_satwrapper_CadicalSolver_cadical_1get_1literals
+JNIEXPORT jbooleanArray JNICALL Java_org_satwrapper_CadicalSolver_cadical_1get_1literals
   (JNIEnv * env, jclass this_class, jlong p) {
-    jintArray result;
+    jbooleanArray result;
     CaDiCaL::Solver * solver = decode(p);
     int size = solver->vars() + 1;
-    result = env->NewIntArray(size);
+    result = env->NewBooleanArray(size);
     if (result == NULL) {
         return NULL;
     }
-    jint literals[size];
+    jboolean literals[size];
     for (int i = 1; i < size; i++) {
-        literals[i] = solver->val(i);
+        literals[i] = (solver->val(i) > 0);
     }
-    env->SetIntArrayRegion(result, 0, size, literals);
+    env->SetBooleanArrayRegion(result, 0, size, literals);
     return result;
   }

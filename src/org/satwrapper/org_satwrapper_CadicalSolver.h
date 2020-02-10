@@ -74,9 +74,9 @@ JNIEXPORT void JNICALL Java_org_satwrapper_CadicalSolver_cadical_1add_1clause
 /*
  * Class:     org_satwrapper_CadicalSolver
  * Method:    cadical_get_literals
- * Signature: (J)[I
+ * Signature: (J)[Z
  */
-JNIEXPORT jintArray JNICALL Java_org_satwrapper_CadicalSolver_cadical_1get_1literals
+JNIEXPORT jbooleanArray JNICALL Java_org_satwrapper_CadicalSolver_cadical_1get_1literals
   (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus

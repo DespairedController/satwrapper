@@ -24,7 +24,7 @@ public abstract class Solver {
 
     public abstract int addLiteral();
 
-    public abstract int[] getLiterals();
+    public abstract boolean[] getLiterals();
 
     public abstract int getNumberOfLiterals();
 }

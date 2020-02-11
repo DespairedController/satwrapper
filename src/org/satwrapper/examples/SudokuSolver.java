@@ -51,7 +51,6 @@ public final class SudokuSolver {
         }
 
         //each column and row contains every number at least once
-
         for (int i = 0; i < size; i++) {
             for (int k = 0; k < size; k++) {
                 List<Integer> row = new ArrayList<>();
